@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   def create
   	@user = User.new(user_params)  # params[:user] 대신 사용한다.
   	if @user.save
+  		sign_in @user
   		flash[:success] = "축하합니다!"
   		redirect_to @user
   	else
