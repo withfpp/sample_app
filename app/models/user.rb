@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  self.per_page = 3 #will_pagination custom
+
+  has_many :microposts, dependent: :destroy #데이터 관계 설정
+
   before_save { self.email = email.downcase }
   before_create :create_remember_token
 
@@ -12,7 +16,11 @@ class User < ActiveRecord::Base
 
 
 
-  def User.new_remember_token
+    def feed
+      Micropost.where("user_id=?", id) #해당 아이디가 가진 마이크로포스트 모두 가져온다.
+    end
+
+    def User.new_remember_token
       SecureRandom.urlsafe_base64
     end
 
@@ -22,8 +30,8 @@ class User < ActiveRecord::Base
 
     private
 
-      def create_remember_token
-        self.remember_token = User.encrypt(User.new_remember_token)
-      end
+    def create_remember_token
+      self.remember_token = User.encrypt(User.new_remember_token)
+    end
 
 end

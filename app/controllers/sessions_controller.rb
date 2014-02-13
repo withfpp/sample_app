@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 		user = User.find_by(email: params[:session][:email].downcase)
 		if user && user.authenticate(params[:session][:password]) #레일즈의 관용적 표현이다.
 			sign_in user
-			redirect_to user
+			redirect_back_or user
 		else
 			flash.now[:error] = "이메일/비밀번호가 일치하지 않습니다."
 			render 'new'
